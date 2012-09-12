@@ -10,5 +10,9 @@ find_package(AprUtil)
 add_definitions(${LIBAPR_DEFINITIONS} ${LIBAPR-UTIL_DEFINITIONS})
 include_directories(${LIBAPR_INCLUDE_DIRS} ${LIBAPR-UTIL_INCLUDE_DIRS})
 
-add_executable(aedaemon src/main.c)
+add_executable(aedaemon src/daemon.c)
 target_link_libraries(aedaemon ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
+
+add_executable(aedaemon1 src/daemon1.c)
+target_link_libraries(aedaemon1 ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
+
