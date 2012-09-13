@@ -13,10 +13,8 @@ conflicts=()
 replaces=()
 backup=()
 install='libaedaemon.install'
-source=("http://www.server.tld/${pkgname}-${pkgver}.tar.gz"
-        "foo.desktop")
-md5sums=('a0afa52d60cea6c0363a2a8cb39a4095'
-         'a0afa52d60cea6c0363a2a8cb39a4095')
+source=("https://github.com/aevalo/${pkgname}/tarball/v${pkgver}")
+sha256sums=('72287882e5103ca017dc433f09d5255ca67c74427130760ee7421b3309ed40df')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
