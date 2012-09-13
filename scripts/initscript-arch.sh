@@ -1,4 +1,5 @@
 #!/bin/bash
+# Example init script for the daemon
 
 . /etc/rc.conf
 . /etc/rc.d/functions
