@@ -1,0 +1,13 @@
+Source: libaedaemon
+Maintainer: Arttu Valo <arttu.valo@gmail.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 8), cmake
+
+Package: libaedaemon
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: libaedaemon
+ LibAeDaemon is a simple library for daemon implementation.
+

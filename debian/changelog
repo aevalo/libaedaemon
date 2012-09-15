@@ -1,0 +1,5 @@
+libaedaemon (0.0.1-3) UNRELEASED; urgency=low
+
+  * Initial release. Adding Debian packaging.
+
+ -- Arttu Valo <aevalo@DebianVM.VMDomain>  Sat, 15 Sep 2012 21:50:12 +0300
