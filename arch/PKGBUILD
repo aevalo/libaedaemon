@@ -2,28 +2,35 @@
 pkgname=libaedaemon
 pkgver=0.0.1
 pkgrel=2
-pkgdesc="libaedaemon."
+pkgdesc="LibAeDaemon"
 url="https://github.com/aevalo/libaedaemon"
-arch=('i686')
-license=('LGPLv3')
-depends=('apr' 'apr-util')
+arch=("i686")
+license=("LGPLv3")
+depends=("apr" "apr-util")
 optdepends=()
-makedepends=('apr' 'apr-util')
+makedepends=("cmake" "apr" "apr-util")
 conflicts=()
 replaces=()
 backup=()
-install='libaedaemon.install'
-source=("https://github.com/aevalo/${pkgname}/tarball/v${pkgver}")
-sha256sums=('72287882e5103ca017dc433f09d5255ca67c74427130760ee7421b3309ed40df')
+install="libaedaemon.install"
+changelog="ChangeLog"
+source=("https://github.com/downloads/aevalo/libaedaemon/${pkgname}-${pkgver}.tar.gz")
+sha256sums=("7d91cae9426d4101cad8df208af6c0fa8d00659af0de67d339aa0d5b606af8c7")
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  cmake ./ -DCMAKE_INSTALL_PREFIX=/usr
+  if [ -f build ];
+  then
+    rm -rf build
+  fi
+  mkdir build
+  cd build
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DLIBAEDAEMON_LINUX_DISTRIBUTION=ArchLinux ..
   make
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}-${pkgver}/build"
   make DESTDIR="${pkgdir}" install
   #install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
