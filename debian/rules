@@ -1,107 +1,21 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper. 
-# This file was originally written by Joey Hess and Craig Small. 
+# Sample debian/rules that uses debhelper.
+#
+# This file was originally written by Joey Hess and Craig Small.
 # As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction. 
-# This special exception was added by Craig Small in version 0.37 of dh-make. 
-# This version of the file for the Debian/GNU Linux wajig package
-# is Copyright 2001-04 by Dirk Eddelbuettel <edd@debian.org>
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
 
-# Uncomment this to turn on verbose mode. 
+# Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-get-orig-source:
-	wget https://github.com/downloads/aevalo/libaedaemon/libaedaemon-0.0.1.tar.gz
-
-configure:
-	dh_testdir
-	if [ -f build ] then rm -rf build fi
-	mkdir build
-	cd build
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DLIBAEDAEMON_LINUX_DISTRIBUTION=Debian ..
-
-build: configure
-	dh_testdir
-	$(MAKE)
-
-clean:
-	dh_testdir
-	dh_testroot
-	if [ -f build ]; then rm -rf build; fi
-	#-$(MAKE) clean
-
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	$(MAKE) install 
-
-# Build architecture-independent files here. 
-binary-indep: build install
-	dh_testdir 
-	dh_testroot 
-	dh_installchangelogs 
-	dh_installdocs 
-	dh_installexamples	
-#	dh_installmenu
-#	dh_installdebconf
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installcatalogs
-#	dh_installpam
-#	dh_installmime
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-#	dh_undocumented
-	dh_installman
-	dh_link
-	dh_strip 
-	dh_compress
-	dh_fixperms 
-#	dh_python 		/usr/share/wajig
-	dh_python
-#	dh_perl
-	dh_installdeb
-	dh_gencontrol
-#	dh_md5sums
-	dh_builddeb
-
-# Build architecture-dependent files here. 
-binary-arch: build install
-#	dh_testdir
-#	dh_testroot
-#	dh_installdebconf
-#	dh_installdocs	
-#	dh_installexamples	
-#	dh_installmenu
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_installinit
-#	dh_installcron
-#	dh_installmanpages
-#	dh_installinfo
-#	dh_undocumented
-#	dh_installchangelogs
-#	dh_python /usr/share/wajig
-#	dh_strip
-#	dh_link
-#	dh_compress
-#	dh_fixperms
-#	dh_suidregister
-#	dh_installdeb
-#	dh_makeshlibs
-#	dh_perl
-#	dh_shlibdeps
-#	dh_gencontrol
-#	dh_md5sums
-#	dh_builddeb
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+%:
+	dh $@ 

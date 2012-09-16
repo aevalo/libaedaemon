@@ -1,13 +1,20 @@
 Source: libaedaemon
-Maintainer: Arttu Valo <arttu.valo@gmail.com>
-Section: misc
-Priority: optional
-Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 8), cmake
+Section: unknown
+Priority: extra
+Maintainer: Arttu Valo <aevalo@DebianVM.VMDomain>
+Build-Depends: debhelper (>= 7.0.50~), cmake, libapr1-dev, libaprutil1-dev
+Standards-Version: 3.8.4
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/libaedaemon.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/libaedaemon.git;a=summary
 
 Package: libaedaemon
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: libaedaemon
- LibAeDaemon is a simple library for daemon implementation.
+Depends: ${shlibs:Depends}, ${misc:Depends}, libapr1, libaprutil1
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
 
+Package: libaedaemon-doc
+Architecture: all
+Description: documentation for libaedaemon
+ <insert long description, indented with spaces>
