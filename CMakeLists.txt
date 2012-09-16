@@ -18,10 +18,13 @@ target_link_libraries(aedaemon ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
 add_executable(aedaemon1 src/daemon1.c)
 target_link_libraries(aedaemon1 ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
 
+add_executable(mp-sample src/mp-sample.c)
+target_link_libraries(mp-sample ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
+
 add_executable(aprdaemon src/aprdaemon.c)
 target_link_libraries(aprdaemon ${LIBAPR_LIBRARIES} ${LIBAPR-UTIL_LIBRARIES})
 
-install(TARGETS aedaemon aedaemon1 aprdaemon
+install(TARGETS aedaemon aedaemon1 mp-sample aprdaemon
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static)

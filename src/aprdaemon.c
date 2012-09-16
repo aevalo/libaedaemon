@@ -21,8 +21,7 @@
 #include <signal.h>
 
 /* For APR and APR-Util */
-#include <apr.h>
-#include <apu.h>
+#include <apr_general.h>
 
 
 /* Change this to whatever your daemon is called */
@@ -34,11 +33,6 @@
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
-static void apr_daemon_shutdown()
-{
-  /* Terminate Apache Portable Runtime */
-  apr_terminate();
-}
 
 static void child_handler(int signum)
 {
@@ -170,13 +164,12 @@ static void daemonize(const char *lockfile)
 }
 
 
-int main(int argc, char *argv[], const char* env[])
+int main(int argc, const char *const *argv, const char *const *env)
 {
   /* Initialize Apache Portable Runtime */
-  apr_status_t rv;
-  rv = apr_app_initialize(&argc, &argv, &env);
+  apr_status_t rv = apr_app_initialize(&argc, &argv, &env);
 
-  atexit(apr_daemon_shutdown());
+  atexit(apr_terminate);
 
   /* Initialize the logging interface */
   openlog(DAEMON_NAME, LOG_PID, LOG_LOCAL5);
