@@ -1,0 +1,11 @@
+Package: libaedaemon-doc
+Source: libaedaemon
+Version: 0.0.1
+Architecture: all
+Maintainer: Arttu Valo <aevalo@DebianVM.VMDomain>
+Installed-Size: 32
+Section: unknown
+Priority: extra
+Homepage: <insert the upstream URL, if relevant>
+Description: documentation for libaedaemon
+ <insert long description, indented with spaces>

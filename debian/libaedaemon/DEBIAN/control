@@ -1,0 +1,11 @@
+Package: libaedaemon
+Version: 0.0.1
+Architecture: i386
+Maintainer: Arttu Valo <aevalo@DebianVM.VMDomain>
+Installed-Size: 44
+Depends: libapr1, libaprutil1
+Section: unknown
+Priority: extra
+Homepage: <insert the upstream URL, if relevant>
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
