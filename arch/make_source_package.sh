@@ -23,7 +23,4 @@ tar --directory /tmp -czf $PKGNAME-$PKGVER.tar.gz $PKGNAME-$PKGVER
 echo "Removing temporary folder..."
 rm -rf /tmp/$PKGNAME-$PKGVER
 
-CHECKSUM=`sha256sum libaedaemon-0.0.1.tar.gz | cut -d ' ' -f1`
-echo "Checksum for the file is $CHECKSUM"
-
 echo "Done."
