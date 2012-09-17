@@ -100,11 +100,12 @@ static void daemonize(const char *lockfile)
 
   /* Fork off the parent process */
   syslog(LOG_INFO, "Forking...");
-  pid = fork();
-  if (pid < 0)
+  apr_status_t rv = apr_proc_detach(1);
+  if (rv != APR_SUCCESS)
   {
-    syslog(LOG_ERR, "unable to fork daemon, code=%d (%s)",
-           errno, strerror(errno));
+    char err[256];
+    char* pError = apr_strerror(rv, err, 256);
+    syslog(LOG_ERR, "unable to fork daemon, (%s)", err);
     exit(EXIT_FAILURE);
   }
 
@@ -131,29 +132,6 @@ static void daemonize(const char *lockfile)
 
   /* Change the file mode mask */
   umask(0);
-
-  /* Create a new SID for the child process */
-  sid = setsid();
-  if (sid < 0)
-  {
-    syslog(LOG_ERR, "unable to create a new session, code %d (%s)",
-           errno, strerror(errno));
-    exit(EXIT_FAILURE);
-  }
-
-  /* Change the current working directory.  This prevents the current
-   * directory from being locked; hence not being able to remove it. */
-  if ((chdir("/")) < 0)
-  {
-    syslog(LOG_ERR, "unable to change directory to %s, code %d (%s)",
-           "/", errno, strerror(errno));
-    exit(EXIT_FAILURE);
-  }
-
-  /* Redirect standard files to /dev/null */
-  freopen("/dev/null", "r", stdin);
-  freopen("/dev/null", "w", stdout);
-  freopen("/dev/null", "w", stderr);
 
   /* Tell the parent process that we are A-okay */
   syslog(LOG_INFO, "Killing parent...");
