@@ -1,2 +1,5 @@
 build/
 *.user
+arch/*.pkg.tar.xz
+arch/*.tar.gz
+

@@ -14,8 +14,8 @@ replaces=()
 backup=()
 install="libaedaemon.install"
 changelog="ChangeLog"
-source=("https://github.com/downloads/aevalo/libaedaemon/${pkgname}-${pkgver}.tar.gz")
-sha256sums=("7d91cae9426d4101cad8df208af6c0fa8d00659af0de67d339aa0d5b606af8c7")
+source=("libaedaemon/${pkgname}-${pkgver}.tar.gz")
+sha256sums=("745c3490e52b8dae712cadbcd3039dccf25bfce5a39cfc982e7ea83ab24a01da")
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
