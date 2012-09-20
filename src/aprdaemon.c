@@ -52,20 +52,31 @@ static void child_handler(int signum)
 
 static void daemonize(const char *lockfile)
 {
+}
+
+
+int main(int argc, const char *const *argv, const char *const *env)
+{
+  /* Initialize Apache Portable Runtime */
+  apr_status_t rv = apr_app_initialize(&argc, &argv, &env);
+
+  atexit(apr_terminate);
+
+  /* Initialize the logging interface */
+  openlog(DAEMON_NAME, LOG_PID, LOG_LOCAL5);
+  syslog(LOG_INFO, "starting");
+
+  /* One may wish to process command line arguments here */
+
+  /* Daemonize */
+  daemonize("/var/lock/subsys/" DAEMON_NAME);
   char s[128];
   sprintf(s, ">>> %s", __PRETTY_FUNCTION__);
   syslog(LOG_INFO, s);
 
   pid_t pid, sid, parent;
   int lfp = -1;
-
-  /* already a daemon */
-  syslog(LOG_INFO, "Getting ppid!");
-  if (getppid() == 1)
-  {
-    syslog(LOG_INFO, "Already a daemon, no need to re-daemonize!");
-    return;
-  }
+  char* lockfile = "/var/lock/infinoted/lock";
 
   /* Create the lock file as the current user */
   syslog(LOG_INFO, "Checking lock files!");
@@ -136,27 +147,6 @@ static void daemonize(const char *lockfile)
   /* Tell the parent process that we are A-okay */
   syslog(LOG_INFO, "Killing parent...");
   kill(parent, SIGUSR1);
-
-  sprintf(s, "<<< %s", __PRETTY_FUNCTION__);
-  syslog(LOG_INFO, s);
-}
-
-
-int main(int argc, const char *const *argv, const char *const *env)
-{
-  /* Initialize Apache Portable Runtime */
-  apr_status_t rv = apr_app_initialize(&argc, &argv, &env);
-
-  atexit(apr_terminate);
-
-  /* Initialize the logging interface */
-  openlog(DAEMON_NAME, LOG_PID, LOG_LOCAL5);
-  syslog(LOG_INFO, "starting");
-
-  /* One may wish to process command line arguments here */
-
-  /* Daemonize */
-  daemonize("/var/lock/subsys/" DAEMON_NAME);
 
   /* Now we are a daemon -- do the work for which we were paid */
 
