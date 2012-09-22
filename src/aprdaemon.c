@@ -111,7 +111,7 @@ int main(int argc, const char *const *argv, const char *const *env)
 
   /* Fork off the parent process */
   syslog(LOG_INFO, "Forking...");
-  apr_status_t rv = apr_proc_detach(1);
+  rv = apr_proc_detach(1);
   if (rv != APR_SUCCESS)
   {
     char err[256];
