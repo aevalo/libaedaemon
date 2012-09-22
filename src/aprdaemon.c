@@ -25,7 +25,7 @@
 
 
 /* Change this to whatever your daemon is called */
-#define DAEMON_NAME "aedaemon1"
+#define DAEMON_NAME "aprdaemon"
 
 /* Change this to the user under which to run */
 #define RUN_AS_USER "aevalo"
@@ -36,6 +36,9 @@
 
 static void child_handler(int signum)
 {
+  char s[128];
+  sprintf(s, "Got signal %d", signum);
+  syslog(LOG_INFO, s);
   switch(signum)
   {
     case SIGALRM:
@@ -50,9 +53,6 @@ static void child_handler(int signum)
   }
 }
 
-static void daemonize(const char *lockfile)
-{
-}
 
 
 int main(int argc, const char *const *argv, const char *const *env)
@@ -69,14 +69,13 @@ int main(int argc, const char *const *argv, const char *const *env)
   /* One may wish to process command line arguments here */
 
   /* Daemonize */
-  daemonize("/var/lock/subsys/" DAEMON_NAME);
   char s[128];
   sprintf(s, ">>> %s", __PRETTY_FUNCTION__);
   syslog(LOG_INFO, s);
 
   pid_t pid, sid, parent;
   int lfp = -1;
-  char* lockfile = "/var/lock/infinoted/lock";
+  char* lockfile = "/var/lock/aprdaemon/lock";
 
   /* Create the lock file as the current user */
   syslog(LOG_INFO, "Checking lock files!");
@@ -125,6 +124,7 @@ int main(int argc, const char *const *argv, const char *const *env)
   {
     /* Wait for confirmation from the child via SIGTERM or SIGCHLD, or
      * for two seconds to elapse (SIGALRM).  pause() should not return. */
+    syslog(LOG_INFO, "Waiting for child permission to kill parent...");
     alarm(2);
     pause();
     exit(EXIT_FAILURE);
@@ -149,6 +149,11 @@ int main(int argc, const char *const *argv, const char *const *env)
   kill(parent, SIGUSR1);
 
   /* Now we are a daemon -- do the work for which we were paid */
+  syslog(LOG_INFO, "This is childs time now.");
+  while(1)
+  {
+    ;
+  }
 
   /* Finish up */
   syslog(LOG_INFO, "terminated");
