@@ -34,6 +34,10 @@
 #define EXIT_FAILURE 1
 
 
+static int parentCanDie = 0;
+static int parentExitCode = -1;
+static int childCanDie = 0;
+
 static void child_handler(int signum)
 {
   char s[128];
@@ -42,13 +46,18 @@ static void child_handler(int signum)
   switch(signum)
   {
     case SIGALRM:
-      exit(EXIT_FAILURE);
+      parentCanDie = 1;
+      parentExitCode = EXIT_FAILURE;
       break;
     case SIGUSR1:
-      exit(EXIT_SUCCESS);
+      parentCanDie = 1;
+      parentExitCode = EXIT_SUCCESS;
       break;
     case SIGCHLD:
       exit(EXIT_FAILURE);
+      break;
+    case SIGTERM:
+      childCanDie = 1;
       break;
   }
 }
@@ -107,6 +116,7 @@ int main(int argc, const char *const *argv, const char *const *env)
   signal(SIGCHLD, child_handler);
   signal(SIGUSR1, child_handler);
   signal(SIGALRM, child_handler);
+  signal(SIGTERM, child_handler); /* Die on SIGTERM */
 
   /* Fork off the parent process */
   syslog(LOG_INFO, "Forking...");
@@ -125,9 +135,12 @@ int main(int argc, const char *const *argv, const char *const *env)
     /* Wait for confirmation from the child via SIGTERM or SIGCHLD, or
      * for two seconds to elapse (SIGALRM).  pause() should not return. */
     syslog(LOG_INFO, "Waiting for child permission to kill parent...");
-    alarm(2);
-    pause();
-    exit(EXIT_FAILURE);
+    while(!parentCanDie)
+    {
+      sleep(1);
+    }
+    syslog(LOG_INFO, "Parent exiting with code %d", parentExitCode);
+    return parentExitCode;
   }
 
   /* At this point we are executing as the child process */
@@ -139,7 +152,7 @@ int main(int argc, const char *const *argv, const char *const *env)
   signal(SIGTTOU, SIG_IGN);
   signal(SIGTTIN, SIG_IGN);
   signal(SIGHUP,  SIG_IGN); /* Ignore hangup signal */
-  signal(SIGTERM, SIG_DFL); /* Die on SIGTERM */
+  signal(SIGKILL, SIG_DFL); /* Die on SIGTERM */
 
   /* Change the file mode mask */
   umask(0);
@@ -150,13 +163,13 @@ int main(int argc, const char *const *argv, const char *const *env)
 
   /* Now we are a daemon -- do the work for which we were paid */
   syslog(LOG_INFO, "This is childs time now.");
-  while(1)
+  while(!childCanDie)
   {
-    ;
+    sleep(1);
   }
 
   /* Finish up */
-  syslog(LOG_INFO, "terminated");
+  syslog(LOG_INFO, "Child terminated!");
   closelog();
 
   return 0;
